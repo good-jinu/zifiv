@@ -1,0 +1,16 @@
+{
+	"name": "@zifiv/feeds",
+	"version": "1.0.0",
+	"description": "",
+	"main": "src/index.ts",
+	"keywords": [],
+	"author": "",
+	"dependencies": {
+		"@aws-sdk/client-dynamodb": "^3.940.0",
+		"@aws-sdk/lib-dynamodb": "^3.940.0",
+		"uuid": "^13.0.0"
+	},
+	"devDependencies": {
+		"@types/uuid": "^11.0.0"
+	}
+}
