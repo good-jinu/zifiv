@@ -49,11 +49,12 @@ export const ContentRenderer = ({
 				</div>
 
 				{/* Content */}
-				<div className="p-8">
-					<div
-						className="prose prose-lg max-w-none text-gray-700 leading-relaxed"
-						// biome-ignore lint/security/noDangerouslySetInnerHtml: temporary
-						dangerouslySetInnerHTML={{ __html: content.htmlContent }}
+				<div className="p-8 aspect-[9/16]">
+					<iframe
+						src={content.contentUrl}
+						title={content.title}
+						className="w-full h-full border-0"
+						sandbox="" // Most restrictive sandbox
 					/>
 				</div>
 

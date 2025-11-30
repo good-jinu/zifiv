@@ -1,4 +1,5 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import {
 	DeleteCommand,
 	DynamoDBDocumentClient,
@@ -12,8 +13,9 @@ import { Resource } from "sst";
 import { v4 as uuidv4 } from "uuid";
 
 // DynamoDB Client Configuration using SST Resource
-const client = new DynamoDBClient({});
-const docClient = DynamoDBDocumentClient.from(client);
+const ddbClient = new DynamoDBClient({});
+const docClient = DynamoDBDocumentClient.from(ddbClient);
+const s3Client = new S3Client({});
 
 // Type Definitions
 export interface ContentItem {
@@ -21,7 +23,7 @@ export interface ContentItem {
 	createdAt: string; // Sort Key (ISO timestamp)
 	authorId: string;
 	title: string;
-	htmlContent: string;
+	contentUrl: string;
 	tags?: string[];
 	status: "draft" | "published" | "archived";
 	viewCount: number;
@@ -47,11 +49,14 @@ export interface UpdateContentInput {
 // Content Service Class
 export class ContentService {
 	private readonly tableName: string;
+	private readonly bucketName: string;
 
 	constructor() {
 		// Use SST Resource reference
 		// biome-ignore lint/suspicious/noExplicitAny: any allowed for Resource
 		this.tableName = (Resource as any).ContentsTable.name;
+		// biome-ignore lint/suspicious/noExplicitAny: any allowed for Resource
+		this.bucketName = (Resource as any).ContentsBucket.name;
 	}
 
 	/**
@@ -59,12 +64,25 @@ export class ContentService {
 	 */
 	async createContent(input: CreateContentInput): Promise<ContentItem> {
 		const now = new Date().toISOString();
+		const contentId = uuidv4();
+		const contentUrl = `https://${this.bucketName}.s3.amazonaws.com/${contentId}.html`;
+
+		// Upload HTML content to S3
+		await s3Client.send(
+			new PutObjectCommand({
+				Bucket: this.bucketName,
+				Key: `${contentId}.html`,
+				Body: input.htmlContent,
+				ContentType: "text/html",
+			}),
+		);
+
 		const content: ContentItem = {
-			contentId: uuidv4(),
+			contentId,
 			createdAt: now,
 			authorId: input.authorId,
 			title: input.title,
-			htmlContent: input.htmlContent,
+			contentUrl,
 			tags: input.tags || [],
 			status: input.status || "draft",
 			viewCount: 0,
@@ -99,6 +117,17 @@ export class ContentService {
 	 * Update content
 	 */
 	async updateContent(input: UpdateContentInput): Promise<ContentItem> {
+		if (input.htmlContent !== undefined) {
+			await s3Client.send(
+				new PutObjectCommand({
+					Bucket: this.bucketName,
+					Key: `${input.contentId}.html`,
+					Body: input.htmlContent,
+					ContentType: "text/html",
+				}),
+			);
+		}
+
 		const updateExpressions: string[] = [];
 		const expressionAttributeNames: Record<string, string> = {};
 		// biome-ignore lint/suspicious/noExplicitAny: temporary
@@ -109,12 +138,6 @@ export class ContentService {
 			updateExpressions.push("#title = :title");
 			expressionAttributeNames["#title"] = "title";
 			expressionAttributeValues[":title"] = input.title;
-		}
-
-		if (input.htmlContent !== undefined) {
-			updateExpressions.push("#htmlContent = :htmlContent");
-			expressionAttributeNames["#htmlContent"] = "htmlContent";
-			expressionAttributeValues[":htmlContent"] = input.htmlContent;
 		}
 
 		if (input.tags !== undefined) {
@@ -152,6 +175,8 @@ export class ContentService {
 	 * Delete content
 	 */
 	async deleteContent(contentId: string): Promise<void> {
+		// Note: S3 object deletion should be handled here as well, possibly as a separate step or via bucket lifecycle policies.
+		// For simplicity, we are only deleting the DynamoDB record.
 		await docClient.send(
 			new DeleteCommand({
 				TableName: this.tableName,

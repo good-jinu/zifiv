@@ -33,12 +33,16 @@ export default $config({
 			},
 		});
 
+		const contentsBucket = new sst.aws.Bucket("ContentsBucket", {
+			public: true,
+		});
+
 		new sst.aws.Nextjs("zifivWeb", {
 			domain: {
 				name: process.env.WEB_DOMAIN ?? "",
 			},
 			path: "packages/web",
-			link: [contentsTable],
+			link: [contentsTable, contentsBucket],
 		});
 	},
 });
