@@ -41,6 +41,9 @@ export default $config({
 			domain: {
 				name: process.env.WEB_DOMAIN ?? "",
 			},
+			environment: {
+				APP_AWS_REGION: process.env.APP_AWS_REGION ?? "us-east-1",
+			},
 			path: "packages/web",
 			link: [contentsTable, contentsBucket],
 		});

@@ -13,9 +13,13 @@ import { Resource } from "sst";
 import { v4 as uuidv4 } from "uuid";
 
 // DynamoDB Client Configuration using SST Resource
-const ddbClient = new DynamoDBClient({});
+const ddbClient = new DynamoDBClient({
+	region: process.env.APP_AWS_REGION,
+});
 const docClient = DynamoDBDocumentClient.from(ddbClient);
-const s3Client = new S3Client({});
+const s3Client = new S3Client({
+	region: process.env.APP_AWS_REGION,
+});
 
 // Type Definitions
 export interface ContentItem {

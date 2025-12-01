@@ -1,28 +1,18 @@
 "use client";
 
 import { FastContent, type FetchCallback } from "@fastcontents/react";
-import { type ContentItem, ContentService } from "@zifiv/feeds";
+import type { ContentItem } from "@zifiv/feeds";
+import { fetchPublishedContents } from "../components/feed/actions";
 import { ContentRenderer } from "../components/feed/ContentRenderer";
 import { NavigationControls } from "../components/feed/NavigationControls";
 
-const contentService = new ContentService();
-
 export default function Home() {
-	// Fetch callback that integrates with ContentService
+	// Fetch callback that integrates with ContentService via server action
 	const fetchCallback: FetchCallback<ContentItem> = async ({
 		offset,
 		limit,
 	}) => {
-		// In real implementation, you'd paginate through DynamoDB
-		const contents = await contentService.getPublishedContents(limit);
-
-		// Simulate pagination by slicing based on offset
-		const paginatedContents = contents.slice(offset, offset + limit);
-
-		return {
-			items: paginatedContents,
-			hasMore: offset + paginatedContents.length < contents.length,
-		};
+		return await fetchPublishedContents(limit, offset);
 	};
 
 	return (

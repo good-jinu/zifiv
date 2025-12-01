@@ -1,8 +1,7 @@
+"use server";
 import { ContentService } from "@zifiv/feeds";
 import { revalidatePath } from "next/cache";
 import "server-only";
-
-const contentService = new ContentService();
 
 export async function createContentAction(formData: FormData) {
 	const title = formData.get("title") as string;
@@ -13,6 +12,7 @@ export async function createContentAction(formData: FormData) {
 	}
 
 	try {
+		const contentService = new ContentService();
 		await contentService.createContent({
 			title,
 			htmlContent,

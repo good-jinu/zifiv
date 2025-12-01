@@ -10,6 +10,7 @@
 		"check": "biome check",
 		"start": "next start",
 		"prod-deploy": "sst deploy --stage production",
+		"prod-dev": "sst dev --stage production",
 		"prod-remove": "sst remove --stage production",
 		"sst:dev": "sst dev --stage production"
 	},
