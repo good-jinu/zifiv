@@ -11,6 +11,9 @@ export default function Home() {
 	const fetchCallback: FetchCallback<ContentItem> = async ({
 		offset,
 		limit,
+	}: {
+		offset: number;
+		limit: number;
 	}) => {
 		return await fetchPublishedContents(limit, offset);
 	};
