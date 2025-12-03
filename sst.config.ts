@@ -4,8 +4,8 @@ export default $config({
 	app(input) {
 		return {
 			name: "zifiv",
-			removal: input?.stage === "production" ? "retain" : "remove",
-			protect: ["production"].includes(input?.stage),
+			// removal: input?.stage === "production" ? "retain" : "remove",
+			// protect: ["production"].includes(input?.stage),
 			home: "aws",
 		};
 	},
@@ -33,8 +33,12 @@ export default $config({
 			},
 		});
 
-		const contentsBucket = new sst.aws.Bucket("ContentsBucket", {
-			public: true,
+		const contentsBucket = new sst.aws.StaticSite("ContentsBucket", {
+			domain: process.env.CONTENTS_DOMAIN,
+			assets: {
+				fileOptions: [],
+				purge: false,
+			},
 		});
 
 		new sst.aws.Nextjs("zifivWeb", {
