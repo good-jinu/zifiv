@@ -4,8 +4,8 @@ export default $config({
 	app(input) {
 		return {
 			name: "zifiv",
-			// removal: input?.stage === "production" ? "retain" : "remove",
-			// protect: ["production"].includes(input?.stage),
+			removal: input?.stage === "production" ? "retain" : "remove",
+			protect: ["production"].includes(input?.stage),
 			home: "aws",
 		};
 	},
@@ -39,6 +39,7 @@ export default $config({
 				fileOptions: [],
 				purge: false,
 			},
+			path: "./empty",
 		});
 
 		new sst.aws.Nextjs("zifivWeb", {
