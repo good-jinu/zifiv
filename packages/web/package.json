@@ -14,7 +14,7 @@
 		"@fastcontents/react": "^0.2.5",
 		"@zifiv/feeds": "workspace:*",
 		"lucide-react": "^0.555.0",
-		"next": "^16",
+		"next": "16.0.7",
 		"react": "^19",
 		"react-dom": "^19"
 	},
