@@ -9,7 +9,7 @@
 		"check:fix:unsafe": "biome check --write --unsafe",
 		"check": "biome check",
 		"start": "next start",
-		"prod-deploy": "mkdir -p empty && sst deploy --stage production && rm -rf empty",
+		"prod-deploy": "sst deploy --stage production",
 		"prod-dev": "sst dev --stage production",
 		"prod-remove": "sst remove --stage production",
 		"sst:dev": "sst dev --stage production"
