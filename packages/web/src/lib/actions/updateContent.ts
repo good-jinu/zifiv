@@ -10,6 +10,7 @@ export async function updateContentAction(
 	const title = formData.get("title") as string;
 	const htmlContent = formData.get("htmlContent") as string;
 	const tagsInput = formData.get("tags") as string;
+	const status = formData.get("status") as "draft" | "published" | "archived";
 
 	if (!contentId) {
 		return { success: false, message: "Content ID is required." };
@@ -34,6 +35,7 @@ export async function updateContentAction(
 			title,
 			htmlContent,
 			tags,
+			status,
 		});
 
 		revalidatePath("/"); // Revalidate the home page

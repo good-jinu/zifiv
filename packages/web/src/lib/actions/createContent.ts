@@ -7,6 +7,7 @@ export async function createContentAction(formData: FormData) {
 	const title = formData.get("title") as string;
 	const htmlContent = formData.get("htmlContent") as string;
 	const tagsInput = formData.get("tags") as string;
+	const status = formData.get("status") as "draft" | "published";
 
 	if (!title || !htmlContent) {
 		return { success: false, message: "Title and content are required." };
@@ -26,7 +27,7 @@ export async function createContentAction(formData: FormData) {
 			title,
 			htmlContent,
 			authorId: "anonymous", // Hardcoded authorId
-			status: "published",
+			status: status || "draft",
 			tags,
 		});
 

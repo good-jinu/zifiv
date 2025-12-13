@@ -20,6 +20,7 @@ interface Content {
 	title: string;
 	htmlContent?: string;
 	tags?: string[];
+	status?: "draft" | "published" | "archived";
 }
 
 interface UploadFormProps {
@@ -100,6 +101,25 @@ export function UploadForm({
 							defaultValue={existingContent?.tags?.join(", ") || ""}
 						/>
 					</InputGroup>
+				</div>
+				<div>
+					<label
+						htmlFor="status"
+						className="block text-sm font-medium text-foreground/70 mb-2"
+					>
+						Status
+					</label>
+					<select
+						name="status"
+						id="status"
+						disabled={isPending}
+						defaultValue={existingContent?.status || "draft"}
+						className="w-full px-3 py-2 border border-input bg-background rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50"
+					>
+						<option value="draft">Draft</option>
+						<option value="published">Published</option>
+						{isEditing && <option value="archived">Archived</option>}
+					</select>
 				</div>
 				<div>
 					<label

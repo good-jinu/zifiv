@@ -1,14 +1,14 @@
-import { UploadForm } from "../../../components/cms/UploadForm";
-import { createContentAction } from "../../../lib/actions/createContent";
-import { getContentAction } from "../../../lib/actions/getContent";
-import { updateContentAction } from "../../../lib/actions/updateContent";
+import { UploadForm } from "@/components/cms/UploadForm";
+import { createContentAction } from "@/lib/actions/createContent";
+import { getContentAction } from "@/lib/actions/getContent";
+import { updateContentAction } from "@/lib/actions/updateContent";
 
 interface UploadPageProps {
-	searchParams: { contentId?: string };
+	searchParams: Promise<{ contentId?: string }>;
 }
 
 export default async function UploadPage({ searchParams }: UploadPageProps) {
-	const { contentId } = searchParams;
+	const { contentId } = await searchParams;
 	const isEditing = !!contentId;
 
 	// If editing, fetch the existing content
@@ -20,6 +20,13 @@ export default async function UploadPage({ searchParams }: UploadPageProps) {
 			existingContent = await getContentAction(contentId);
 			if (!existingContent) {
 				contentNotFound = true;
+			} else {
+				console.log("Loaded existing content for editing:", {
+					contentId: existingContent.contentId,
+					title: existingContent.title,
+					hasHtmlContent: !!existingContent.htmlContent,
+					tagsCount: existingContent.tags?.length || 0,
+				});
 			}
 		} catch (error) {
 			console.error("Error fetching content:", error);
