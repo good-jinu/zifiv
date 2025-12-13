@@ -1,6 +1,12 @@
 "use client";
 
 import { type FormEvent, useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+	InputGroup,
+	InputGroupInput,
+	InputGroupTextarea,
+} from "@/components/ui/input-group";
 
 type ActionResult = {
 	success: boolean;
@@ -38,44 +44,63 @@ export function UploadForm({ createContentAction }: UploadFormProps) {
 	};
 
 	return (
-		<div className="max-w-2xl w-full bg-white rounded-lg shadow-md p-8">
-			<h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
+		<div className="max-w-2xl w-full">
+			<h1 className="text-2xl font-bold mb-6 text-center text-foreground">
 				Create New Content
 			</h1>
 			<form onSubmit={handleSubmit} className="space-y-6">
 				<div>
 					<label
 						htmlFor="title"
-						className="block text-sm font-medium text-gray-700"
+						className="block text-sm font-medium text-foreground/70 mb-2"
 					>
 						Title
 					</label>
-					<input
-						type="text"
-						name="title"
-						id="title"
-						required
-						disabled={isPending}
-						className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm disabled:bg-gray-50"
-						placeholder="Enter the title"
-					/>
+					<InputGroup>
+						<InputGroupInput
+							type="text"
+							name="title"
+							id="title"
+							required
+							disabled={isPending}
+							placeholder="Enter the title"
+						/>
+					</InputGroup>
+				</div>
+				<div>
+					<label
+						htmlFor="tags"
+						className="block text-sm font-medium text-foreground/70 mb-2"
+					>
+						Tags
+					</label>
+					<InputGroup>
+						<InputGroupInput
+							type="text"
+							name="tags"
+							id="tags"
+							disabled={isPending}
+							placeholder="Enter tags separated by commas (e.g., tech, tutorial, javascript)"
+						/>
+					</InputGroup>
 				</div>
 				<div>
 					<label
 						htmlFor="htmlContent"
-						className="block text-sm font-medium text-gray-700"
+						className="block text-sm font-medium text-foreground/70 mb-2"
 					>
 						HTML Content
 					</label>
-					<textarea
-						name="htmlContent"
-						id="htmlContent"
-						required
-						rows={15}
-						disabled={isPending}
-						className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm disabled:bg-gray-50"
-						placeholder="Enter the full HTML body"
-					/>
+					<InputGroup>
+						<InputGroupTextarea
+							name="htmlContent"
+							id="htmlContent"
+							required
+							rows={15}
+							disabled={isPending}
+							placeholder="Enter the full HTML body"
+						/>
+					</InputGroup>
 				</div>
 
 				{successMessage && (
@@ -91,13 +116,14 @@ export function UploadForm({ createContentAction }: UploadFormProps) {
 				)}
 
 				<div>
-					<button
+					<Button
 						type="submit"
 						disabled={isPending}
-						className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:bg-purple-300"
+						className="w-full"
+						size="lg"
 					>
 						{isPending ? "Creating..." : "Create Content"}
-					</button>
+					</Button>
 				</div>
 			</form>
 		</div>

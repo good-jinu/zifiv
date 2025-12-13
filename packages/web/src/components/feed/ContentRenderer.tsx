@@ -31,52 +31,49 @@ export const ContentRenderer = ({
 	};
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center p-4">
-			<div className="max-w-2xl w-full bg-white rounded-2xl shadow-2xl overflow-hidden">
-				{/* Header */}
-				<div className="bg-gradient-to-r from-purple-600 to-blue-600 p-6 text-white">
-					<h1 className="text-3xl font-bold mb-2">{content.title}</h1>
-					<div className="flex items-center gap-4 text-sm opacity-90">
-						<div className="flex items-center gap-1">
-							<Calendar size={16} />
-							<span>{formatDate(content.createdAt)}</span>
-						</div>
-						<div className="flex items-center gap-1">
-							<Eye size={16} />
-							<span>{content.viewCount.toLocaleString()} views</span>
-						</div>
-					</div>
-				</div>
+		<div className="h-full w-full overflow-hidden flex flex-col">
+			{/* Content */}
+			<div className="flex-1">
+				<iframe
+					src={content.contentUrl}
+					title={content.title}
+					className="w-full h-full border-0"
+					sandbox="" // Most restrictive sandbox
+				/>
+			</div>
 
-				{/* Content */}
-				<div className="p-8 aspect-[9/16]">
-					<iframe
-						src={content.contentUrl}
-						title={content.title}
-						className="w-full h-full border-0"
-						sandbox="" // Most restrictive sandbox
-					/>
+			{/* Bottom Section with Title and Info */}
+			<div className="bg-background text-foreground py-1 px-6">
+				<h1 className="text-2xl font-bold mb-2">{content.title}</h1>
+
+				<div className="flex items-center gap-4 text-sm opacity-90">
+					<div className="flex items-center gap-1">
+						<Calendar size={16} />
+						<span>{formatDate(content.createdAt)}</span>
+					</div>
+					<div className="flex items-center gap-1">
+						<Eye size={16} />
+						<span>{content.viewCount.toLocaleString()} views</span>
+					</div>
 				</div>
 
 				{/* Tags */}
 				{content.tags && content.tags.length > 0 && (
-					<div className="px-8 pb-6">
-						<div className="flex items-center gap-2 flex-wrap">
-							<Tag size={16} className="text-gray-400" />
-							{content.tags.map((tag) => (
-								<span
-									key={tag}
-									className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium"
-								>
-									#{tag}
-								</span>
-							))}
-						</div>
+					<div className="flex items-center gap-2 flex-wrap mb-2">
+						<Tag size={16} className="text-white opacity-70" />
+						{content.tags.map((tag) => (
+							<span
+								key={tag}
+								className="px-2 py-1 bg-white bg-opacity-20 text-white rounded-full text-xs font-medium"
+							>
+								#{tag}
+							</span>
+						))}
 					</div>
 				)}
 
 				{/* Counter */}
-				<div className="px-8 pb-6 text-center text-sm text-gray-500">
+				<div className="text-center text-xs opacity-70 mt-2">
 					Content {index + 1}
 				</div>
 			</div>

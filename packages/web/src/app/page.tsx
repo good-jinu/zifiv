@@ -19,20 +19,22 @@ export default function Home() {
 	};
 
 	return (
-		<FastContent
-			fetchCallback={fetchCallback}
-			renderer={ContentRenderer}
-			renderControls={NavigationControls}
-			initialBatchSize={3}
-			batchSize={2}
-			fallback={
-				<div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
-					<div className="text-center">
-						<div className="animate-spin h-12 w-12 border-4 border-purple-600 border-t-transparent rounded-full mx-auto mb-4" />
-						<p className="text-gray-600 text-lg">Loading content...</p>
+		<div className="h-screen max-h-screen w-full max-w-2xl m-auto overflow-hidden">
+			<FastContent
+				fetchCallback={fetchCallback}
+				renderer={ContentRenderer}
+				renderControls={NavigationControls}
+				initialBatchSize={3}
+				batchSize={2}
+				fallback={
+					<div className="h-full flex items-center justify-center">
+						<div className="text-center">
+							<div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4" />
+							<p className="text-gray-600 text-lg">Loading content...</p>
+						</div>
 					</div>
-				</div>
-			}
-		/>
+				}
+			/>
+		</div>
 	);
 }

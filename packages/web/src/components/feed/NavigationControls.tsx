@@ -28,7 +28,7 @@ export const NavigationControls = ({
 	}, [hasPrev, hasNext, onPrev, onNext, isLoading]);
 
 	return (
-		<div className="fixed right-8 top-1/2 -translate-y-1/2 flex flex-col gap-4">
+		<div className="absolute bottom-2 right-4 flex flex-col gap-4">
 			<button
 				type="button"
 				onClick={onPrev}

@@ -6,10 +6,19 @@ import "server-only";
 export async function createContentAction(formData: FormData) {
 	const title = formData.get("title") as string;
 	const htmlContent = formData.get("htmlContent") as string;
+	const tagsInput = formData.get("tags") as string;
 
 	if (!title || !htmlContent) {
 		return { success: false, message: "Title and content are required." };
 	}
+
+	// Process tags: split by comma, trim whitespace, and filter out empty strings
+	const tags = tagsInput
+		? tagsInput
+				.split(",")
+				.map((tag) => tag.trim())
+				.filter((tag) => tag.length > 0)
+		: undefined;
 
 	try {
 		const contentService = new ContentService();
@@ -18,6 +27,7 @@ export async function createContentAction(formData: FormData) {
 			htmlContent,
 			authorId: "anonymous", // Hardcoded authorId
 			status: "published",
+			tags,
 		});
 
 		revalidatePath("/"); // Revalidate the home page

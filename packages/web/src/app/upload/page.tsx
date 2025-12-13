@@ -1,5 +1,5 @@
-import { createContentAction } from "../../components/upload/actions";
 import { UploadForm } from "../../components/upload/UploadForm";
+import { createContentAction } from "../../lib/actions/createContent";
 
 export default function UploadPage() {
 	const contentAction = async (formData: FormData) => {
