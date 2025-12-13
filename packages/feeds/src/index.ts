@@ -54,24 +54,24 @@ export interface UpdateContentInput {
 export class ContentService {
 	private readonly tableName: string;
 	private readonly bucketName: string;
-	private readonly cdnDomain: string;
+	private readonly contentsDomain: string;
 
 	constructor() {
 		// Use SST Resource reference
 		// biome-ignore lint/suspicious/noExplicitAny: any allowed for Resource
 		this.tableName = (Resource as any).ContentsTable.name;
 		this.bucketName = process.env.CONTENTS_BUCKET_NAME ?? "";
-		this.cdnDomain = process.env.CONTENTS_DOMAIN ?? "";
+		this.contentsDomain = process.env.CONTENTS_DOMAIN ?? "";
 	}
 
 	/**
 	 * Create a new content item
 	 */
 	async createContent(input: CreateContentInput): Promise<ContentItem> {
-		const now = new Date().toISOString();
-		const contentId = uuidv4();
-		console.log("cdn: ", this.cdnDomain);
-		const contentUrl = `https://${this.cdnDomain}/${contentId}.html`;
+		const nowDate = new Date();
+		const now = nowDate.toISOString();
+		const contentId = `${nowDate.getTime()}-${uuidv4()}`;
+		const contentUrl = `https://${this.contentsDomain}/${contentId}.html`;
 
 		// Upload HTML content to S3
 		await s3Client.send(

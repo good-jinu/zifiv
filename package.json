@@ -10,9 +10,9 @@
 		"check": "biome check",
 		"start": "next start",
 		"prod-deploy": "sst deploy --stage production",
-		"prod-dev": "sst dev --stage production",
+		"sst:dev": "sst dev --stage developement",
 		"prod-remove": "sst remove --stage production",
-		"sst:dev": "sst dev --stage production"
+		"dev-remove": "sst remove --stage developement"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2",

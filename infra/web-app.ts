@@ -9,7 +9,7 @@ export function createWebApp(
 	contentsTable: sst.aws.Dynamo,
 	contentsBucket: aws.s3.BucketV2,
 ) {
-	return new sst.aws.Nextjs("zifivWeb", {
+	const next = new sst.aws.Nextjs("zifivWeb", {
 		domain: {
 			name: process.env.WEB_DOMAIN ?? "",
 		},
@@ -21,4 +21,20 @@ export function createWebApp(
 		path: "packages/web",
 		link: [contentsTable, contentsBucket],
 	});
+
+	new aws.iam.RolePolicy("NextjsContentsPutPolicy", {
+		role: next.nodes.server?.nodes.role.name ?? "",
+		policy: {
+			Version: "2012-10-17",
+			Statement: [
+				{
+					Effect: "Allow",
+					Action: ["s3:PutObject", "s3:PutObjectAcl"],
+					Resource: $interpolate`${contentsBucket.arn}/*`,
+				},
+			],
+		},
+	});
+
+	return next;
 }

@@ -50,7 +50,7 @@ export function createContentCDN(
 	certificateValidation: aws.acm.CertificateValidation,
 ) {
 	const oac = new aws.cloudfront.OriginAccessControl("CdnOAC", {
-		name: "CDN OAC",
+		name: `CDN-OAC-${$app.stage}`,
 		description: "CDN OAC for Contents Bucket",
 		originAccessControlOriginType: "s3",
 		signingBehavior: "always",
