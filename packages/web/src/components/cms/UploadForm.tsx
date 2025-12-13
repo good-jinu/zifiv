@@ -15,11 +15,24 @@ type ActionResult = {
 
 type CreateContentAction = (formData: FormData) => Promise<ActionResult>;
 
-interface UploadFormProps {
-	createContentAction: CreateContentAction;
+interface Content {
+	contentId: string;
+	title: string;
+	htmlContent?: string;
+	tags?: string[];
 }
 
-export function UploadForm({ createContentAction }: UploadFormProps) {
+interface UploadFormProps {
+	createContentAction: CreateContentAction;
+	existingContent?: Content | null;
+	isEditing?: boolean;
+}
+
+export function UploadForm({
+	createContentAction,
+	existingContent,
+	isEditing = false,
+}: UploadFormProps) {
 	const [isPending, setIsPending] = useState(false);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -35,7 +48,9 @@ export function UploadForm({ createContentAction }: UploadFormProps) {
 
 		if (result.success) {
 			setSuccessMessage(result.message);
-			(event.target as HTMLFormElement).reset(); // Reset form on success
+			if (!isEditing) {
+				(event.target as HTMLFormElement).reset(); // Reset form on success only when creating
+			}
 		} else {
 			setErrorMessage(result.message);
 		}
@@ -46,7 +61,7 @@ export function UploadForm({ createContentAction }: UploadFormProps) {
 	return (
 		<div className="max-w-2xl w-full">
 			<h1 className="text-2xl font-bold mb-6 text-center text-foreground">
-				Create New Content
+				{isEditing ? "Edit Content" : "Create New Content"}
 			</h1>
 			<form onSubmit={handleSubmit} className="space-y-6">
 				<div>
@@ -64,6 +79,7 @@ export function UploadForm({ createContentAction }: UploadFormProps) {
 							required
 							disabled={isPending}
 							placeholder="Enter the title"
+							defaultValue={existingContent?.title || ""}
 						/>
 					</InputGroup>
 				</div>
@@ -81,6 +97,7 @@ export function UploadForm({ createContentAction }: UploadFormProps) {
 							id="tags"
 							disabled={isPending}
 							placeholder="Enter tags separated by commas (e.g., tech, tutorial, javascript)"
+							defaultValue={existingContent?.tags?.join(", ") || ""}
 						/>
 					</InputGroup>
 				</div>
@@ -99,6 +116,7 @@ export function UploadForm({ createContentAction }: UploadFormProps) {
 							rows={15}
 							disabled={isPending}
 							placeholder="Enter the full HTML body"
+							defaultValue={existingContent?.htmlContent || ""}
 						/>
 					</InputGroup>
 				</div>
@@ -122,7 +140,13 @@ export function UploadForm({ createContentAction }: UploadFormProps) {
 						className="w-full"
 						size="lg"
 					>
-						{isPending ? "Creating..." : "Create Content"}
+						{isPending
+							? isEditing
+								? "Updating..."
+								: "Creating..."
+							: isEditing
+								? "Update Content"
+								: "Create Content"}
 					</Button>
 				</div>
 			</form>
