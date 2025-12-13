@@ -15,7 +15,7 @@ export default function Home() {
 		offset: number;
 		limit: number;
 	}) => {
-		return await fetchPublishedContents(limit, offset);
+		return await fetchPublishedContents({ limit, offset });
 	};
 
 	return (
