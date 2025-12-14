@@ -2,6 +2,7 @@
 
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useEffect } from "react";
+import { Button } from "../ui/button";
 
 // Navigation Controls
 export const NavigationControls = ({
@@ -28,32 +29,26 @@ export const NavigationControls = ({
 	}, [hasPrev, hasNext, onPrev, onNext, isLoading]);
 
 	return (
-		<div className="absolute bottom-2 right-4 flex flex-col gap-4">
-			<button
-				type="button"
+		<div className="absolute bottom-1 right-3 flex flex-col gap-1">
+			<Button
+				size="icon"
 				onClick={onPrev}
 				disabled={!hasPrev || isLoading}
-				className="bg-white rounded-full p-4 shadow-lg hover:shadow-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:scale-110 active:scale-95"
+				className="rounded-full"
 				title="Previous (Arrow Up)"
 			>
-				<ChevronUp size={24} className="text-purple-600" />
-			</button>
+				<ChevronUp className="size-4" />
+			</Button>
 
-			{isLoading && (
-				<div className="bg-white rounded-full p-4 shadow-lg">
-					<div className="animate-spin h-6 w-6 border-3 border-purple-600 border-t-transparent rounded-full" />
-				</div>
-			)}
-
-			<button
-				type="button"
+			<Button
+				size="icon"
 				onClick={onNext}
 				disabled={!hasNext || isLoading}
-				className="bg-white rounded-full p-4 shadow-lg hover:shadow-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:scale-110 active:scale-95"
+				className="rounded-full"
 				title="Next (Arrow Down)"
 			>
-				<ChevronDown size={24} className="text-purple-600" />
-			</button>
+				<ChevronDown className="size-4" />
+			</Button>
 		</div>
 	);
 };
