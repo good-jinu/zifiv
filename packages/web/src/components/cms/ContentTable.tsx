@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Table,
@@ -11,6 +11,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { listContentAction } from "@/lib/actions/listContent";
 import { ContentActions } from "./ContentActions";
 
 interface ContentItem {
@@ -25,12 +26,64 @@ interface ContentItem {
 }
 
 interface ContentTableProps {
-	contents: ContentItem[];
+	initialContents: ContentItem[];
+	initialLastKey?: { contentId: string };
 }
 
-export function ContentTable({ contents }: ContentTableProps) {
+export function ContentTable({
+	initialContents,
+	initialLastKey,
+}: ContentTableProps) {
+	const [contents, setContents] = useState<ContentItem[]>(initialContents);
+	const [lastKey, setLastKey] = useState<{ contentId: string } | undefined>(
+		initialLastKey,
+	);
 	const [searchTerm, setSearchTerm] = useState("");
 	const [statusFilter, setStatusFilter] = useState<string>("all");
+	const [isLoading, setIsLoading] = useState(false);
+	const [hasMore, setHasMore] = useState(!!initialLastKey);
+
+	// Load more content
+	const loadMore = useCallback(async () => {
+		if (isLoading || !hasMore || !lastKey) return;
+
+		setIsLoading(true);
+		try {
+			const result = await listContentAction(20, lastKey);
+			if (result.success) {
+				setContents((prev) => [...prev, ...result.data]);
+				setLastKey(result.lastKey);
+				setHasMore(!!result.lastKey);
+			}
+		} catch (error) {
+			console.error("Error loading more content:", error);
+		} finally {
+			setIsLoading(false);
+		}
+	}, [lastKey, isLoading, hasMore]);
+
+	// Infinite scroll effect using Intersection Observer
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0].isIntersecting && hasMore && !isLoading) {
+					loadMore();
+				}
+			},
+			{ threshold: 0.1 },
+		);
+
+		const sentinel = document.getElementById("scroll-sentinel");
+		if (sentinel) {
+			observer.observe(sentinel);
+		}
+
+		return () => {
+			if (sentinel) {
+				observer.unobserve(sentinel);
+			}
+		};
+	}, [loadMore, hasMore, isLoading]);
 
 	// Filter contents based on search term and status
 	const filteredContents = contents.filter((content) => {
@@ -182,7 +235,28 @@ export function ContentTable({ contents }: ContentTableProps) {
 
 			{/* Footer */}
 			<div className="p-4 border-t border-gray-200 text-center text-sm text-gray-500">
-				Showing {filteredContents.length} of {contents.length} content items
+				<div className="flex items-center justify-between">
+					<span>
+						Showing {filteredContents.length} of {contents.length} content items
+					</span>
+					{hasMore && (
+						<Button
+							onClick={loadMore}
+							disabled={isLoading}
+							variant="outline"
+							size="sm"
+						>
+							{isLoading ? "Loading..." : "Load More"}
+						</Button>
+					)}
+				</div>
+				{isLoading && (
+					<div className="mt-2 text-xs text-gray-400">
+						Loading more content...
+					</div>
+				)}
+				{/* Intersection Observer sentinel */}
+				{hasMore && <div id="scroll-sentinel" className="h-1" />}
 			</div>
 		</div>
 	);

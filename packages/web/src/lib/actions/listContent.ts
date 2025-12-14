@@ -2,10 +2,13 @@
 import { ContentService } from "@zifiv/feeds";
 import "server-only";
 
-export async function listContentAction(limit: number = 50) {
+export async function listContentAction(
+	limit: number = 20,
+	lastKey?: { contentId: string },
+) {
 	try {
 		const contentService = new ContentService();
-		const result = await contentService.getAllContents(limit);
+		const result = await contentService.getAllContents(limit, lastKey);
 
 		return {
 			success: true,

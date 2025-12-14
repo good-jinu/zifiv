@@ -19,8 +19,6 @@ export default async function CMSListPage() {
 		);
 	}
 
-	const contents = result.data;
-
 	return (
 		<div className="min-h-screen bg-gray-50 p-4">
 			<div className="max-w-6xl mx-auto">
@@ -48,7 +46,10 @@ export default async function CMSListPage() {
 				</div>
 
 				{/* Content Table */}
-				<ContentTable contents={contents} />
+				<ContentTable
+					initialContents={result.data}
+					initialLastKey={result.lastKey}
+				/>
 			</div>
 		</div>
 	);

@@ -288,6 +288,7 @@ export class ContentService {
 				TableName: this.tableName,
 				Limit: limit,
 				ExclusiveStartKey: lastKey,
+				ConsistentRead: true,
 			}),
 		);
 
