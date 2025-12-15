@@ -1,0 +1,30 @@
+<svg
+  width="360"
+  height="350"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <title>Logo</title>
+
+  <defs>
+    <linearGradient id="goldPinkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <!-- soft gold base -->
+      <stop offset="0%" stop-color="#e2c18a" />
+      <!-- main gold -->
+      <stop offset="40%" stop-color="#b48a50" />
+      <!-- pink highlight -->
+      <stop offset="55%" stop-color="#ff40a4" />
+      <!-- deep gold shadow -->
+      <stop offset="100%" stop-color="#7a5a2f" />
+    </linearGradient>
+  </defs>
+
+  <path
+    d="M10 160a145 145 0 1 0 215-90q-10-8 4-13 8-2 14 3l80 80a15 15 0 0 0 30-30l-90-90q-20-20-40 0l-50 50a125 125 0 1 1-143 90 10 10 0 1 0-20 0"
+    fill="url(#goldPinkGradient)"
+  />
+
+  <path
+    d="M40 195a110 110 0 1 0 220 0 110 110 0 1 0-220 0h60a50 50 0 1 1 100 0 50 50 0 1 1-100 0"
+    fill="url(#goldPinkGradient)"
+  />
+</svg>
