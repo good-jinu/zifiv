@@ -2,7 +2,7 @@
 
 import type { ContentItem } from "@zifiv/feeds";
 import { Calendar, Eye, Info, Tag } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Drawer,
@@ -14,6 +14,7 @@ import {
 	DrawerTitle,
 	DrawerTrigger,
 } from "@/components/ui/drawer";
+import { incrementViewCount } from "./actions";
 
 // Content Renderer Component
 export const ContentRenderer = ({
@@ -22,15 +23,11 @@ export const ContentRenderer = ({
 	content: ContentItem;
 	index: number;
 }) => {
-	const [viewIncremented, setViewIncremented] = useState(false);
-
 	useEffect(() => {
-		// Increment view count when content is displayed
-		if (!viewIncremented) {
-			// In real app: await contentService.incrementViewCount(content.contentId);
-			setViewIncremented(true);
+		if (content.contentId) {
+			incrementViewCount(content.contentId);
 		}
-	}, [viewIncremented]);
+	}, [content.contentId]);
 
 	const formatDate = (dateString: string) => {
 		return new Date(dateString).toLocaleDateString("en-US", {
