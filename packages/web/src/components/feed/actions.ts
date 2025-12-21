@@ -13,13 +13,24 @@ export async function fetchPublishedContents({
 	items: ContentItem[];
 	hasMore: boolean;
 }> {
+	// TODO: This pagination logic is inefficient. It fetches all items up to the current offset on every request.
+	// This should be improved by implementing cursor-based pagination in the `getPublishedContents` method.
 	const contents = await contentService.getPublishedContents(
-		limit + offset + 1,
+		limit + 1 + offset,
 	);
-	const paginatedContents = contents.slice(offset, offset + limit);
+	const hasMore = contents.length > limit + offset;
+	const paginatedContents = contents.slice(offset, limit + offset);
 
 	return {
 		items: paginatedContents,
-		hasMore: offset + paginatedContents.length < contents.length,
+		hasMore,
 	};
+}
+
+export async function incrementViewCount(contentId: string) {
+	try {
+		await contentService.incrementViewCount(contentId);
+	} catch (error) {
+		console.error(`Failed to increment view count for ${contentId}`, error);
+	}
 }
