@@ -31,7 +31,7 @@ export class ContentRepository {
 	private readonly bucketName: string;
 
 	constructor() {
-		this.tableName = (Resource as SstResource).ContentsTable.name;
+		this.tableName = (Resource as unknown as SstResource).ContentsTable.name;
 		this.bucketName = process.env.CONTENTS_BUCKET_NAME ?? "";
 	}
 
