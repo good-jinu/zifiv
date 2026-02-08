@@ -1,40 +1,60 @@
-"use client";
-
-import { FastContent, type FetchCallback } from "@fastcontents/react";
-import type { ContentItem } from "@zifiv/feeds";
+import Link from "next/link";
+import { auth } from "@/auth";
 import { fetchPublishedContents } from "../components/feed/actions";
-import { ContentRenderer } from "../components/feed/ContentRenderer";
-import { NavigationControls } from "../components/feed/NavigationControls";
+import { signOutAction } from "./actions";
 
-export default function Home() {
-	// Fetch callback that integrates with ContentService via server action
-	const fetchCallback: FetchCallback<ContentItem> = async ({
-		offset,
-		limit,
-	}: {
-		offset: number;
-		limit: number;
-	}) => {
-		return await fetchPublishedContents({ limit, offset });
-	};
+export default async function Home() {
+	const session = await auth();
+	const initialContents = await fetchPublishedContents({
+		limit: 10,
+		offset: 0,
+	});
 
 	return (
-		<div className="h-screen max-h-screen w-full max-w-2xl m-auto overflow-hidden">
-			<FastContent
-				fetchCallback={fetchCallback}
-				renderer={ContentRenderer}
-				renderControls={NavigationControls}
-				initialBatchSize={3}
-				batchSize={2}
-				fallback={
-					<div className="h-full flex items-center justify-center">
-						<div className="text-center">
-							<div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4" />
-							<p className="text-gray-600 text-lg">Loading content...</p>
+		<main className="max-w-2xl mx-auto p-4">
+			<header className="flex justify-between items-center mb-6">
+				<h1 className="text-2xl font-bold">Contents</h1>
+				<div>
+					{session?.user ? (
+						<div className="flex items-center gap-4">
+							<span>{session.user.name}</span>
+							<form action={signOutAction}>
+								<button
+									type="submit"
+									className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+								>
+									Sign Out
+								</button>
+							</form>
 						</div>
-					</div>
-				}
-			/>
-		</div>
+					) : (
+						<Link
+							href="/auth/signin"
+							className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+						>
+							Sign In
+						</Link>
+					)}
+				</div>
+			</header>
+
+			<div className="grid gap-4">
+				{initialContents.items.map((item) => (
+					<Link
+						key={item.contentId}
+						href="/contents"
+						className="block p-4 border rounded hover:bg-gray-50 transition-colors"
+					>
+						<h2 className="font-semibold">{item.title}</h2>
+						<p className="text-sm text-gray-600">
+							{new Date(item.createdAt).toLocaleDateString()}
+						</p>
+					</Link>
+				))}
+				{initialContents.items.length === 0 && (
+					<p className="text-center text-gray-500">No contents found.</p>
+				)}
+			</div>
+		</main>
 	);
 }
