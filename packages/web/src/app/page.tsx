@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
 import { fetchPublishedContents } from "../components/feed/actions";
+import { signOutAction } from "./actions";
 
 export default async function Home() {
 	const session = await auth();
@@ -17,12 +18,7 @@ export default async function Home() {
 					{session?.user ? (
 						<div className="flex items-center gap-4">
 							<span>{session.user.name}</span>
-							<form
-								action={async () => {
-									"use server";
-									await signOut();
-								}}
-							>
+							<form action={signOutAction}>
 								<button
 									type="submit"
 									className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
