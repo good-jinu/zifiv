@@ -7,7 +7,8 @@
 		"lint": "biome check",
 		"start": "next start",
 		"deploy": "sst deploy --stage production",
-		"sst:dev": "sst dev --stage production"
+		"sst:dev": "sst dev --stage production",
+		"test": "node --test 'src/**/*.test.ts'"
 	},
 	"dependencies": {
 		"@aws-sdk/client-s3": "^3",
