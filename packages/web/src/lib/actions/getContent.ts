@@ -14,17 +14,13 @@ export async function getContentAction(contentId: string) {
 
 	try {
 		const contentService = new ContentService();
-		const content = await contentService.getContent(contentId);
+		const bucketName = process.env.CONTENTS_BUCKET_NAME;
 
-		if (!content) {
-			throw new Error("Content not found");
-		}
-
-		// Fetch HTML content from S3
-		let htmlContent = "";
-		try {
-			const bucketName = process.env.CONTENTS_BUCKET_NAME;
-			if (bucketName) {
+		// Start fetching metadata and HTML content in parallel
+		const contentPromise = contentService.getContent(contentId);
+		const htmlContentPromise = (async () => {
+			if (!bucketName) return "";
+			try {
 				const response = await s3Client.send(
 					new GetObjectCommand({
 						Bucket: bucketName,
@@ -33,13 +29,21 @@ export async function getContentAction(contentId: string) {
 				);
 
 				if (response.Body) {
-					htmlContent = await response.Body.transformToString();
+					return await response.Body.transformToString();
 				}
+			} catch (s3Error) {
+				console.warn("Could not fetch HTML content from S3:", s3Error);
 			}
-		} catch (s3Error) {
-			console.warn("Could not fetch HTML content from S3:", s3Error);
-			// Continue without HTML content - it's not critical for editing metadata
+			return "";
+		})();
+
+		const content = await contentPromise;
+
+		if (!content) {
+			throw new Error("Content not found");
 		}
+
+		const htmlContent = await htmlContentPromise;
 
 		return {
 			...content,
