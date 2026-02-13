@@ -16,28 +16,28 @@ export async function getContentAction(contentId: string) {
 		const contentService = new ContentService();
 		const bucketName = process.env.CONTENTS_BUCKET_NAME;
 
-		// Start fetching metadata and HTML content in parallel
-		const contentPromise = contentService.getContent(contentId);
-		const htmlContentPromise = (async () => {
-			if (!bucketName) return "";
-			try {
-				const response = await s3Client.send(
-					new GetObjectCommand({
-						Bucket: bucketName,
-						Key: `${contentId}.html`,
-					}),
-				);
+		// Fetch metadata and HTML content in parallel
+		const [content, htmlContent] = await Promise.all([
+			contentService.getContent(contentId),
+			(async () => {
+				if (!bucketName) return "";
+				try {
+					const response = await s3Client.send(
+						new GetObjectCommand({
+							Bucket: bucketName,
+							Key: `${contentId}.html`,
+						}),
+					);
 
-				if (response.Body) {
-					return await response.Body.transformToString();
+					if (response.Body) {
+						return await response.Body.transformToString();
+					}
+				} catch (s3Error) {
+					console.warn("Could not fetch HTML content from S3:", s3Error);
 				}
-			} catch (s3Error) {
-				console.warn("Could not fetch HTML content from S3:", s3Error);
-			}
-			return "";
-		})();
-
-		const content = await contentPromise;
+				return "";
+			})(),
+		]);
 
 		if (!content) {
 			throw new Error("Content not found");
