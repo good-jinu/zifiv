@@ -43,6 +43,8 @@ export async function getContentAction(contentId: string) {
 			throw new Error("Content not found");
 		}
 
+		const htmlContent = await htmlContentPromise;
+
 		return {
 			...content,
 			htmlContent,
