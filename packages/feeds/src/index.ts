@@ -67,8 +67,30 @@ export class ContentService {
 		return this.repository.getByAuthor(authorId, limit);
 	}
 
-	async getPublishedContents(limit: number = 20): Promise<ContentItem[]> {
-		return this.repository.getPublished(limit);
+	async getPublishedContents(
+		limit: number = 20,
+		cursor?: string,
+	): Promise<{
+		items: ContentItem[];
+		nextCursor?: string;
+	}> {
+		const decodedCursor = cursor
+			? JSON.parse(Buffer.from(cursor, "base64").toString("utf-8"))
+			: undefined;
+
+		const { items, lastKey } = await this.repository.getPublished(
+			limit,
+			decodedCursor,
+		);
+
+		const nextCursor = lastKey
+			? Buffer.from(JSON.stringify(lastKey)).toString("base64")
+			: undefined;
+
+		return {
+			items,
+			nextCursor,
+		};
 	}
 
 	async searchByTag(tag: string): Promise<ContentItem[]> {

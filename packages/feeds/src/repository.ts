@@ -137,7 +137,10 @@ export class ContentRepository {
 		return (result.Items as ContentItem[]) || [];
 	}
 
-	async getPublished(limit: number = 20): Promise<ContentItem[]> {
+	async getPublished(
+		limit: number = 20,
+		cursor?: Record<string, any>,
+	): Promise<{ items: ContentItem[]; lastKey?: Record<string, any> }> {
 		const result = await docClient.send(
 			new QueryCommand({
 				TableName: this.tableName,
@@ -151,9 +154,13 @@ export class ContentRepository {
 				},
 				Limit: limit,
 				ScanIndexForward: false,
+				ExclusiveStartKey: cursor,
 			}),
 		);
-		return (result.Items as ContentItem[]) || [];
+		return {
+			items: (result.Items as ContentItem[]) || [],
+			lastKey: result.LastEvaluatedKey,
+		};
 	}
 
 	async searchByTag(tag: string): Promise<ContentItem[]> {
