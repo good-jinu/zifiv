@@ -2,9 +2,9 @@
 
 import { FastContent, type FetchCallback } from "@fastcontents/react";
 import type { ContentItem } from "@zifiv/feeds";
-import { fetchPublishedContents } from "../../components/feed/actions";
-import { ContentRenderer } from "../../components/feed/ContentRenderer";
-import { NavigationControls } from "../../components/feed/NavigationControls";
+import { fetchPublishedContents } from "@/components/feed/actions";
+import { ContentRenderer } from "@/components/feed/ContentRenderer";
+import { NavigationControls } from "@/components/feed/NavigationControls";
 
 export default function Home() {
 	// Fetch callback that integrates with ContentService via server action
