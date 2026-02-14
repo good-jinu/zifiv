@@ -1,32 +1,29 @@
 /// <reference path="../.sst/platform/config.d.ts" />
 
 /**
- * Web Application Infrastructure
- * Handles Next.js application deployment and configuration
+ * Admin Application Infrastructure
+ * Handles Next.js admin application deployment
  */
 
-export function createWebApp(
+export function createAdminApp(
 	contentsTable: sst.aws.Dynamo,
 	specialPagesTable: sst.aws.Dynamo,
 	contentsBucket: aws.s3.BucketV2,
 ) {
-	const next = new sst.aws.Nextjs("zifivWeb", {
+	const next = new sst.aws.Nextjs("zifivAdmin", {
 		domain: {
-			name: process.env.WEB_DOMAIN ?? "",
+			name: process.env.ADMIN_DOMAIN ?? "admin.zifiv.com",
 		},
 		environment: {
 			APP_AWS_REGION: process.env.APP_AWS_REGION ?? "us-east-1",
 			CONTENTS_DOMAIN: process.env.CONTENTS_DOMAIN ?? "",
 			CONTENTS_BUCKET_NAME: contentsBucket.bucket,
-			AUTH_SECRET: process.env.AUTH_SECRET ?? "",
-			AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID ?? "",
-			AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET ?? "",
 		},
-		path: "packages/web",
+		path: "packages/admin-web",
 		link: [contentsTable, specialPagesTable, contentsBucket],
 	});
 
-	new aws.iam.RolePolicy("NextjsContentsPutPolicy", {
+	new aws.iam.RolePolicy("NextjsAdminContentsPutPolicy", {
 		role: next.nodes.server?.nodes.role.name ?? "",
 		policy: {
 			Version: "2012-10-17",

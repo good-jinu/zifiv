@@ -1,5 +1,5 @@
-import { test } from "node:test";
 import assert from "node:assert";
+import { test } from "node:test";
 import { cn } from "./utils.ts";
 
 test("cn utility function", async (t) => {

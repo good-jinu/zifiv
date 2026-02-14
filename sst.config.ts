@@ -18,13 +18,15 @@ export default $config({
 			setupDomainAndSSL,
 			createDnsRecord,
 			createWebApp,
+			createAdminApp,
 		} = await import("./infra");
 
 		// Create AWS provider for us-east-1 (required for CloudFront certificates)
 		const usEast1 = createUsEast1Provider();
 
 		// Create content storage (DynamoDB + S3)
-		const { contentsTable, contentsBucket } = createContentStorage();
+		const { contentsTable, specialPagesTable, contentsBucket } =
+			createContentStorage();
 
 		// Setup domain and SSL certificate
 		const { hostedZone, certificateValidation } =
@@ -40,6 +42,9 @@ export default $config({
 		createDnsRecord(hostedZone, distribution);
 
 		// Create Next.js web application
-		createWebApp(contentsTable, contentsBucket);
+		createWebApp(contentsTable, specialPagesTable, contentsBucket);
+
+		// Create Next.js admin application
+		createAdminApp(contentsTable, specialPagesTable, contentsBucket);
 	},
 });
