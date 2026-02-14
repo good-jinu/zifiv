@@ -24,7 +24,8 @@ export default $config({
 		const usEast1 = createUsEast1Provider();
 
 		// Create content storage (DynamoDB + S3)
-		const { contentsTable, contentsBucket } = createContentStorage();
+		const { contentsTable, specialPagesTable, contentsBucket } =
+			createContentStorage();
 
 		// Setup domain and SSL certificate
 		const { hostedZone, certificateValidation } =
@@ -40,6 +41,6 @@ export default $config({
 		createDnsRecord(hostedZone, distribution);
 
 		// Create Next.js web application
-		createWebApp(contentsTable, contentsBucket);
+		createWebApp(contentsTable, specialPagesTable, contentsBucket);
 	},
 });

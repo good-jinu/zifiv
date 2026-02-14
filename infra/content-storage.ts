@@ -29,6 +29,14 @@ export function createContentStorage() {
 		},
 	});
 
+	// DynamoDB Table for Special Pages Configuration
+	const specialPagesTable = new sst.aws.Dynamo("SpecialPagesTable", {
+		fields: {
+			pageId: "string",
+		},
+		primaryIndex: { hashKey: "pageId" },
+	});
+
 	// S3 Bucket for content storage
 	const contentsBucket = new aws.s3.BucketV2("ContentsBucket", {
 		forceDestroy: true,
@@ -42,7 +50,7 @@ export function createContentStorage() {
 		restrictPublicBuckets: true,
 	});
 
-	return { contentsTable, contentsBucket };
+	return { contentsTable, specialPagesTable, contentsBucket };
 }
 
 export function createContentCDN(
