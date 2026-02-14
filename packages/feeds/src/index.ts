@@ -86,9 +86,6 @@ export class ContentService {
 	}
 }
 
-export type { SpecialPageConfig, UpdateSpecialPageInput } from "./special-page";
-export { SpecialPageService } from "./special-page-service";
-
 export default ContentService;
 export type {
 	ContentItem,
