@@ -12,7 +12,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { listContentAction } from "@/lib/actions/listContent";
-import { ContentActions } from "./ContentActions";
+import { ContentActions } from "@/components/cms/ContentActions";
 
 interface ContentItem {
 	contentId: string;
