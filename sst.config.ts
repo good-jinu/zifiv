@@ -18,6 +18,7 @@ export default $config({
 			setupDomainAndSSL,
 			createDnsRecord,
 			createWebApp,
+			createAdminApp,
 		} = await import("./infra");
 
 		// Create AWS provider for us-east-1 (required for CloudFront certificates)
@@ -42,5 +43,8 @@ export default $config({
 
 		// Create Next.js web application
 		createWebApp(contentsTable, specialPagesTable, contentsBucket);
+
+		// Create Next.js admin application
+		createAdminApp(contentsTable, specialPagesTable, contentsBucket);
 	},
 });

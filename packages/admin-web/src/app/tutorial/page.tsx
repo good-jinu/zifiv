@@ -1,4 +1,4 @@
-import { TutorialForm } from "@/components/cms/TutorialForm";
+import { TutorialForm } from "@/components/TutorialForm";
 import { getTutorialConfigAction } from "@/lib/actions/special-page";
 
 export const dynamic = "force-dynamic";
@@ -15,8 +15,6 @@ export default async function TutorialPage() {
 						<a href="/" className="hover:text-gray-800">
 							Home
 						</a>
-						<span className="mx-2">/</span>
-						<span className="text-gray-800">CMS</span>
 						<span className="mx-2">/</span>
 						<span className="text-gray-800">Tutorial Config</span>
 					</div>

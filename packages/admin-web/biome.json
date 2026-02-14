@@ -1,0 +1,12 @@
+{
+	"extends": "//",
+	"overrides": [
+		{
+			"linter": {
+				"domains": {
+					"next": "recommended"
+				}
+			}
+		}
+	]
+}
