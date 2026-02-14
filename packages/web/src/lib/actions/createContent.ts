@@ -1,9 +1,15 @@
 "use server";
+import { auth } from "@/auth";
 import { ContentService } from "@zifiv/feeds";
 import { revalidatePath } from "next/cache";
 import "server-only";
 
 export async function createContentAction(formData: FormData) {
+	const session = await auth();
+	if (!session?.user?.id) {
+		return { success: false, message: "Unauthorized. Please sign in." };
+	}
+
 	const title = formData.get("title") as string;
 	const htmlContent = formData.get("htmlContent") as string;
 	const tagsInput = formData.get("tags") as string;
@@ -26,7 +32,7 @@ export async function createContentAction(formData: FormData) {
 		await contentService.createContent({
 			title,
 			htmlContent,
-			authorId: "anonymous", // Hardcoded authorId
+			authorId: session.user.id,
 			status: status || "draft",
 			tags,
 		});
