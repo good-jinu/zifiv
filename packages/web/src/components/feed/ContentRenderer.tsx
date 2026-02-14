@@ -16,6 +16,14 @@ import {
 } from "@/components/ui/drawer";
 import { incrementViewCount } from "@/components/feed/actions";
 
+const formatDate = (dateString: string) => {
+	return new Date(dateString).toLocaleDateString("en-US", {
+		month: "short",
+		day: "numeric",
+		year: "numeric",
+	});
+};
+
 // Content Renderer Component
 export const ContentRenderer = ({
 	content,
@@ -27,15 +35,7 @@ export const ContentRenderer = ({
 		if (content.contentId) {
 			incrementViewCount(content.contentId);
 		}
-	}, [content.contentId]);
-
-	const formatDate = (dateString: string) => {
-		return new Date(dateString).toLocaleDateString("en-US", {
-			month: "short",
-			day: "numeric",
-			year: "numeric",
-		});
-	};
+	}, [content.contentId, incrementViewCount]);
 
 	return (
 		<div className="h-full w-full overflow-hidden relative">
