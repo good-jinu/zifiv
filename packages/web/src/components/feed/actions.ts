@@ -1,7 +1,7 @@
 "use server";
 
 import type { ContentItem } from "@zifiv/feeds";
-import { contentService } from "./service";
+import { contentService } from "@/components/feed/service";
 
 export async function fetchPublishedContents({
 	limit,

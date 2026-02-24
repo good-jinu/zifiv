@@ -14,7 +14,7 @@ import {
 	DrawerTitle,
 	DrawerTrigger,
 } from "@/components/ui/drawer";
-import { incrementViewCount } from "./actions";
+import { incrementViewCount } from "@/components/feed/actions";
 
 // Content Renderer Component
 export const ContentRenderer = ({
