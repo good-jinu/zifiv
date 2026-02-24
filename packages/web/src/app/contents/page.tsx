@@ -2,11 +2,15 @@
 
 import { FastContent, type FetchCallback } from "@fastcontents/react";
 import type { ContentItem } from "@zifiv/feeds";
-import { fetchPublishedContents } from "@/components/feed/actions";
-import { ContentRenderer } from "@/components/feed/ContentRenderer";
-import { NavigationControls } from "@/components/feed/NavigationControls";
+import { useRef } from "react";
+import { fetchPublishedContents } from "../../components/feed/actions";
+import { ContentRenderer } from "../../components/feed/ContentRenderer";
+import { NavigationControls } from "../../components/feed/NavigationControls";
 
 export default function Home() {
+	// Map to store nextCursors for each offset to enable efficient cursor-based fetching
+	const cursorsRef = useRef<Record<number, string>>({});
+
 	// Fetch callback that integrates with ContentService via server action
 	const fetchCallback: FetchCallback<ContentItem> = async ({
 		offset,
@@ -15,7 +19,15 @@ export default function Home() {
 		offset: number;
 		limit: number;
 	}) => {
-		return await fetchPublishedContents({ limit, offset });
+		const cursor = cursorsRef.current[offset];
+		const result = await fetchPublishedContents({ limit, offset, cursor });
+
+		// If we got a nextCursor, store it for the next offset
+		if (result.nextCursor) {
+			cursorsRef.current[offset + limit] = result.nextCursor;
+		}
+
+		return result;
 	};
 
 	return (

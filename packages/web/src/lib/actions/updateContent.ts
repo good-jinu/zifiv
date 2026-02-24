@@ -1,4 +1,5 @@
 "use server";
+import { auth } from "@/auth";
 import { ContentService } from "@zifiv/feeds";
 import { revalidatePath } from "next/cache";
 import "server-only";
@@ -7,6 +8,11 @@ export async function updateContentAction(
 	contentId: string,
 	formData: FormData,
 ) {
+	const session = await auth();
+	if (!session?.user?.id) {
+		return { success: false, message: "Unauthorized. Please sign in." };
+	}
+
 	const title = formData.get("title") as string;
 	const htmlContent = formData.get("htmlContent") as string;
 	const tagsInput = formData.get("tags") as string;
@@ -30,6 +36,19 @@ export async function updateContentAction(
 
 	try {
 		const contentService = new ContentService();
+		const existingContent = await contentService.getContent(contentId);
+
+		if (!existingContent) {
+			return { success: false, message: "Content not found." };
+		}
+
+		if (existingContent.authorId !== session.user.id) {
+			return {
+				success: false,
+				message: "You are not authorized to update this content.",
+			};
+		}
+
 		await contentService.updateContent({
 			contentId,
 			title,

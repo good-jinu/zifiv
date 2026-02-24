@@ -7,7 +7,6 @@ export default async function Home() {
 	const session = await auth();
 	const initialContents = await fetchPublishedContents({
 		limit: 10,
-		offset: 0,
 	});
 
 	return (
