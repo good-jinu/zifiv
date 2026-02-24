@@ -1,7 +1,7 @@
 "use server";
-import { auth } from "@/auth";
 import { ContentService } from "@zifiv/feeds";
 import { revalidatePath } from "next/cache";
+import { auth } from "@/auth";
 import "server-only";
 
 export async function deleteContentAction(contentId: string) {

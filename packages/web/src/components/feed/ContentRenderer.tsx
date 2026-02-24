@@ -3,6 +3,7 @@
 import type { ContentItem } from "@zifiv/feeds";
 import { Calendar, Eye, Info, Tag } from "lucide-react";
 import { useEffect } from "react";
+import { incrementViewCount } from "@/components/feed/actions";
 import { Button } from "@/components/ui/button";
 import {
 	Drawer,
@@ -14,7 +15,6 @@ import {
 	DrawerTitle,
 	DrawerTrigger,
 } from "@/components/ui/drawer";
-import { incrementViewCount } from "@/components/feed/actions";
 
 const formatDate = (dateString: string) => {
 	return new Date(dateString).toLocaleDateString("en-US", {
@@ -35,7 +35,7 @@ export const ContentRenderer = ({
 		if (content.contentId) {
 			incrementViewCount(content.contentId);
 		}
-	}, [content.contentId, incrementViewCount]);
+	}, [content.contentId]);
 
 	return (
 		<div className="h-full w-full overflow-hidden relative">

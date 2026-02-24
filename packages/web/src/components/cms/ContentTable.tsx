@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { ContentActions } from "@/components/cms/ContentActions";
 import { Button } from "@/components/ui/button";
 import {
 	Table,
@@ -12,7 +13,6 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { listContentAction } from "@/lib/actions/listContent";
-import { ContentActions } from "@/components/cms/ContentActions";
 
 interface ContentItem {
 	contentId: string;

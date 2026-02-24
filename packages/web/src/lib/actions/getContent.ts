@@ -17,7 +17,7 @@ export async function getContentAction(contentId: string) {
 		const bucketName = process.env.CONTENTS_BUCKET_NAME;
 
 		// Fetch metadata and HTML content in parallel
-		const [content, htmlContent] = await Promise.all([
+		const [content, _htmlContent] = await Promise.all([
 			contentService.getContent(contentId),
 			(async () => {
 				if (!bucketName) return "";

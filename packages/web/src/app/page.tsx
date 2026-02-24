@@ -1,7 +1,7 @@
 import Link from "next/link";
+import { signOutAction } from "@/app/actions";
 import { auth } from "@/auth";
 import { fetchPublishedContents } from "@/components/feed/actions";
-import { signOutAction } from "@/app/actions";
 
 export default async function Home() {
 	const session = await auth();
