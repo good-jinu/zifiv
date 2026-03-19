@@ -1,6 +1,7 @@
 "use server";
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { ContentService } from "@zifiv/feeds";
+import { auth } from "@/auth";
 import "server-only";
 
 const s3Client = new S3Client({
@@ -8,6 +9,11 @@ const s3Client = new S3Client({
 });
 
 export async function getContentAction(contentId: string) {
+	const session = await auth();
+	if (!session?.user?.isAdmin) {
+		throw new Error("Unauthorized. Admins only.");
+	}
+
 	if (!contentId) {
 		throw new Error("Content ID is required");
 	}

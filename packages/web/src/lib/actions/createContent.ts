@@ -6,8 +6,8 @@ import "server-only";
 
 export async function createContentAction(formData: FormData) {
 	const session = await auth();
-	if (!session?.user?.id) {
-		return { success: false, message: "Unauthorized. Please sign in." };
+	if (!session?.user?.isAdmin || !session?.user?.id) {
+		return { success: false, message: "Unauthorized. Admins only." };
 	}
 
 	const title = formData.get("title") as string;

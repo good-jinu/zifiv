@@ -1,11 +1,17 @@
 "use server";
 import { ContentService } from "@zifiv/feeds";
+import { auth } from "@/auth";
 import "server-only";
 
 export async function listContentAction(
 	limit: number = 20,
 	lastKey?: { contentId: string },
 ) {
+	const session = await auth();
+	if (!session?.user?.isAdmin) {
+		return { success: false, message: "Unauthorized. Admins only.", data: [] };
+	}
+
 	try {
 		const contentService = new ContentService();
 		const result = await contentService.getAllContents(limit, lastKey);

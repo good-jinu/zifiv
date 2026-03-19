@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ContentTable } from "@/components/cms/ContentTable";
+import { ContentTable } from "@/components/admin/ContentTable";
 import { Button } from "@/components/ui/button";
 import { listContentAction } from "@/lib/actions/listContent";
 
@@ -40,7 +40,7 @@ export default async function CMSListPage() {
 					<h1 className="text-3xl font-bold text-gray-900">
 						Content Management
 					</h1>
-					<Link href="/cms/upload">
+					<Link href="/admin/upload">
 						<Button size="lg">Add New Content</Button>
 					</Link>
 				</div>

@@ -71,12 +71,12 @@ export default async function CMSPage() {
 					<div className="bg-white rounded-lg shadow p-6">
 						<h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
 						<div className="space-y-3">
-							<Link href="/cms/upload" className="block">
+							<Link href="/admin/upload" className="block">
 								<Button className="w-full justify-start" size="lg">
 									Create New Content
 								</Button>
 							</Link>
-							<Link href="/cms/list" className="block">
+							<Link href="/admin/list" className="block">
 								<Button
 									variant="outline"
 									className="w-full justify-start"
@@ -121,7 +121,9 @@ export default async function CMSPage() {
 											>
 												{content.status}
 											</span>
-											<Link href={`/cms/upload?contentId=${content.contentId}`}>
+											<Link
+												href={`/admin/upload?contentId=${content.contentId}`}
+											>
 												<Button variant="ghost" size="sm">
 													Edit
 												</Button>
@@ -130,7 +132,7 @@ export default async function CMSPage() {
 									</div>
 								))}
 								{contents.length > 5 && (
-									<Link href="/cms/list" className="block text-center">
+									<Link href="/admin/list" className="block text-center">
 										<Button variant="ghost" size="sm" className="w-full">
 											View All ({contents.length} total)
 										</Button>

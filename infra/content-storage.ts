@@ -42,7 +42,15 @@ export function createContentStorage() {
 		restrictPublicBuckets: true,
 	});
 
-	return { contentsTable, contentsBucket };
+	// DynamoDB Table for Admins
+	const adminsTable = new sst.aws.Dynamo("AdminsTable", {
+		fields: {
+			email: "string",
+		},
+		primaryIndex: { hashKey: "email" },
+	});
+
+	return { contentsTable, contentsBucket, adminsTable };
 }
 
 export function createContentCDN(

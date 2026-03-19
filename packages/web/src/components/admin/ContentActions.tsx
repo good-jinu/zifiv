@@ -66,7 +66,7 @@ export function ContentActions({ contentId }: ContentActionsProps) {
 
 	return (
 		<div className="flex gap-2">
-			<Link href={`/cms/upload?contentId=${contentId}`}>
+			<Link href={`/admin/upload?contentId=${contentId}`}>
 				<Button variant="outline" size="sm">
 					Edit
 				</Button>
