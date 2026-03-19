@@ -4,7 +4,19 @@ import type {
 	CreateContentInput,
 	UpdateContentInput,
 } from "./content";
-import { ContentRepository } from "./repository";
+import { AdminRepository, ContentRepository } from "./repository";
+
+export class AdminService {
+	private readonly repository: AdminRepository;
+
+	constructor() {
+		this.repository = new AdminRepository();
+	}
+
+	async isAdmin(email: string): Promise<boolean> {
+		return this.repository.isAdmin(email);
+	}
+}
 
 export class ContentService {
 	private readonly repository: ContentRepository;

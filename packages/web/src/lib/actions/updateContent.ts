@@ -9,8 +9,8 @@ export async function updateContentAction(
 	formData: FormData,
 ) {
 	const session = await auth();
-	if (!session?.user?.id) {
-		return { success: false, message: "Unauthorized. Please sign in." };
+	if (!session?.user?.isAdmin) {
+		return { success: false, message: "Unauthorized. Admins only." };
 	}
 
 	const title = formData.get("title") as string;
@@ -42,13 +42,6 @@ export async function updateContentAction(
 			return { success: false, message: "Content not found." };
 		}
 
-		if (existingContent.authorId !== session.user.id) {
-			return {
-				success: false,
-				message: "You are not authorized to update this content.",
-			};
-		}
-
 		await contentService.updateContent({
 			contentId,
 			title,
@@ -58,7 +51,7 @@ export async function updateContentAction(
 		});
 
 		revalidatePath("/"); // Revalidate the home page
-		revalidatePath(`/cms/upload?contentId=${contentId}`); // Revalidate the current page
+		revalidatePath(`/admin/upload?contentId=${contentId}`); // Revalidate the current page
 
 		return { success: true, message: "Content updated successfully!" };
 	} catch (error) {

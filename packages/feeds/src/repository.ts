@@ -24,6 +24,27 @@ interface SstResource {
 	ContentsTable: {
 		name: string;
 	};
+	AdminsTable: {
+		name: string;
+	};
+}
+
+export class AdminRepository {
+	private readonly tableName: string;
+
+	constructor() {
+		this.tableName = (Resource as unknown as SstResource).AdminsTable.name;
+	}
+
+	async isAdmin(email: string): Promise<boolean> {
+		const result = await docClient.send(
+			new GetCommand({
+				TableName: this.tableName,
+				Key: { email },
+			}),
+		);
+		return !!result.Item;
+	}
 }
 
 export class ContentRepository {

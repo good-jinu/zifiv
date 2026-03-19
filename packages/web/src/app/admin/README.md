@@ -4,15 +4,15 @@ This directory contains the CMS functionality for managing content.
 
 ## Pages
 
-### Dashboard (`/cms`)
+### Dashboard (`/admin`)
 - Overview of content statistics
 - Quick actions for creating and managing content
 - Recent content list with edit links
 
-### Upload Page (`/cms/upload`)
+### Upload Page (`/admin/upload`)
 **Features:**
-- **Create new content:** Visit `/cms/upload` to create new content
-- **Edit existing content:** Visit `/cms/upload?contentId=<id>` to edit existing content
+- **Create new content:** Visit `/admin/upload` to create new content
+- **Edit existing content:** Visit `/admin/upload?contentId=<id>` to edit existing content
 
 **Query Parameters:**
 - `contentId` (optional): When provided, the page will load the existing content for editing
@@ -20,13 +20,13 @@ This directory contains the CMS functionality for managing content.
 **Usage Examples:**
 ```
 # Create new content
-/cms/upload
+/admin/upload
 
 # Edit existing content
-/cms/upload?contentId=1703123456789-abc123-def456
+/admin/upload?contentId=1703123456789-abc123-def456
 ```
 
-### List Page (`/cms/list`)
+### List Page (`/admin/list`)
 **Features:**
 - View all content in a table format
 - Search and filter functionality
@@ -66,4 +66,4 @@ The CMS uses the following server actions:
 
 ## Migration
 
-The old `/upload` page now redirects to `/cms/upload` to maintain backward compatibility.
+The old `/upload` page now redirects to `/admin/upload` to maintain backward compatibility.

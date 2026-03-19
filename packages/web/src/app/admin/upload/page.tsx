@@ -1,4 +1,4 @@
-import { UploadForm } from "@/components/cms/UploadForm";
+import { UploadForm } from "@/components/admin/UploadForm";
 import { createContentAction } from "@/lib/actions/createContent";
 import { getContentAction } from "@/lib/actions/getContent";
 import { updateContentAction } from "@/lib/actions/updateContent";
@@ -46,7 +46,7 @@ export default async function UploadPage({ searchParams }: UploadPageProps) {
 						The content with ID "{contentId}" could not be found.
 					</p>
 					<a
-						href="/cms/upload"
+						href="/admin/upload"
 						className="text-blue-600 hover:text-blue-800 underline"
 					>
 						Create new content instead

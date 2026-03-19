@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { ContentActions } from "@/components/cms/ContentActions";
+import { ContentActions } from "@/components/admin/ContentActions";
 import { Button } from "@/components/ui/button";
 import {
 	Table,
@@ -110,7 +110,7 @@ export function ContentTable({
 					<p className="text-gray-500 mb-4">
 						Get started by creating your first piece of content.
 					</p>
-					<Link href="/cms/upload">
+					<Link href="/admin/upload">
 						<Button>Create Content</Button>
 					</Link>
 				</div>

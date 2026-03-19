@@ -8,6 +8,7 @@
 export function createWebApp(
 	contentsTable: sst.aws.Dynamo,
 	contentsBucket: aws.s3.BucketV2,
+	adminsTable: sst.aws.Dynamo,
 ) {
 	const next = new sst.aws.Nextjs("zifivWeb", {
 		domain: {
@@ -22,7 +23,7 @@ export function createWebApp(
 			AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET ?? "",
 		},
 		path: "packages/web",
-		link: [contentsTable, contentsBucket],
+		link: [contentsTable, contentsBucket, adminsTable],
 	});
 
 	new aws.iam.RolePolicy("NextjsContentsPutPolicy", {
